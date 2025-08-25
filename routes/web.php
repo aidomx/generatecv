@@ -10,3 +10,4 @@ Route::get('/resume/create', [ResumeController::class, 'create'])->name('resume.
 Route::post('/resume', [ResumeController::class, 'store'])->name('resume.store');
 Route::get('/resume/{resume}', [ResumeController::class, 'show'])->name('resume.show');
 Route::get('/resume/{resume}/download', [ResumeController::class, 'download'])->name('resume.download');
+
