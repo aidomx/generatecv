@@ -12,14 +12,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('resumes', function (Blueprint $table) {
-          $table->id();
-          $table->string('name');
-          $table->string('email');
-          $table->string('phone');
-          $table->text('education')->nullable();
-          $table->text('experience')->nullable();
-          $table->text('skills')->nullable();
-          $table->timestamps();
+            $table->id();
+
+            // Data utama
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('photo')->nullable();
+
+            // Data pribadi
+            $table->string('birth_place')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->text('address')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('religion')->nullable();
+            $table->string('marital_status')->nullable();
+            $table->unsignedSmallInteger('height')->nullable();
+            $table->unsignedSmallInteger('weight')->nullable();
+            $table->string('blood_type')->nullable();
+            $table->string('nationality')->nullable(); 
+            $table->timestamps();
         });
     }
 
@@ -28,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('resumes');
+      Schema::dropIfExists('resumes');
     }
 };

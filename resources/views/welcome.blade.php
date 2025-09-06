@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Generate CV</title>
-    @vite('resources/css/app.css')
-</head>
-<body class="flex items-center justify-center min-h-screen bg-gray-100">
+@extends("layouts.app")
+
+@section("title", "Generate CV")
+
+@section("content")
 
     <div class="p-8 text-center bg-white shadow-lg rounded-2xl">
         <h1 class="mb-4 text-3xl font-bold text-gray-800">Selamat Datang di GenerateCV</h1>
@@ -17,5 +14,4 @@
         </a>
     </div>
 
-</body>
-</html>
+@endsection
