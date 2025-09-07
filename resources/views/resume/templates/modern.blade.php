@@ -3,113 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ $resume->name }} - CV</title>
-    @vite('resources/css/app.css')
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 210mm;
+            height: 297mm;
+            background: #f5f5f5;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            display: table; /* lebih stabil di PDF */
+            box-shadow: 0 0 1rem rgba(0,0,0,0.2);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .col-left, .col-right {
+            display: table-cell;
+            vertical-align: top;
+        }
+        /* Kolom kiri */
+        .col-left {
+            width: 30%;
+            background: #1a1a1a;
+            color: #eee;
+            padding: 2rem 1rem;
+            box-sizing: border-box;
+        }
+        .profile-wrapper {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto;
+            border: 4px solid #fff;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Kolom kanan */
+        .col-right {
+            width: 70%;
+            background: #fff;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+        .header-info h1 {
+            margin: 0;
+            font-size: 22pt;
+            color: #3498db;
+        }
+        .header-info p {
+            margin: 0;
+            font-size: 11pt;
+            color: #555;
+        }
+        /* Section */
+        .section {
+            margin-bottom: 1.2rem;
+        }
+        .section-title {
+            background: #3498db;
+            color: #fff;
+            font-weight: bold;
+            padding: 0.4rem 0.6rem;
+            border-radius: 0.3rem;
+            margin-bottom: 0.6rem;
+            font-size: 12pt;
+        }
+        .item {
+            margin-bottom: 0.8rem;
+        }
+        .item h4 {
+            margin: 0;
+            font-size: 11.5pt;
+            color: #fff;
+        }
+        .item p {
+            margin: 0;
+            font-size: 10pt;
+            color: #ccc;
+        }
+        .col-right .item h4 {
+            color: #000;
+        }
+        .col-right .item p {
+            color: #444;
+        }
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        ul li {
+            font-size: 11pt;
+            margin-bottom: 4px;
+        }
+        table.info {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.info td {
+            padding: 3px 6px;
+            vertical-align: top;
+            font-size: 10.5pt;
+            color: #333;
+        }
+        table.info td:first-child {
+            font-weight: bold;
+            width: 130px;
+        }
+        table.info td:nth-child(2) {
+            width: 15px;
+            text-align: center;
+            color: #aaa;
+        }
+        .header-info {
+          margin-bottom: 1rem;
+        }
+    </style>
 </head>
-<body class="font-sans bg-gray-100">
-    <div class="max-w-4xl mx-auto bg-white shadow-lg">
-        
-        <!-- Header -->
-        <div class="relative overflow-hidden text-white bg-blue-600">
-            <!-- Lingkaran dekorasi -->
-            <div class="absolute bg-blue-700 rounded-full -top-20 -left-20 w-72 h-72"></div>
-            <div class="absolute w-32 h-32 bg-blue-500 rounded-full top-10 left-56 opacity-80"></div>
-
-            <!-- Kontak bar -->
-            <div class="relative z-10 flex justify-end p-4 text-sm space-x-6">
-                <span>{{ $resume->phone }}</span>
-                <span>{{ $resume->address }}</span>
-                <span>{{ $resume->email }}</span>
-                @if($resume->website)
-                    <span>{{ $resume->website }}</span>
+<body>
+<div class="container">
+    <!-- Kolom Kiri -->
+    <div class="col-left">
+        <div class="profile-wrapper">
+            <div class="profile-pic">
+                @if($resume->photo)
+                    <img src="{{ public_path('storage/' . $resume->photo) }}" alt="photo">
+                @else
+                    <img src="https://via.placeholder.com/120" alt="default photo">
                 @endif
             </div>
-
-            <!-- Foto + Info -->
-            <div class="relative z-10 flex items-center px-10 pb-10">
-                <!-- Foto -->
-                <div class="-ml-6 overflow-hidden bg-gray-200 border-4 border-white rounded-full w-28 h-28">
-                    @if($resume->photo)
-                        <img src="{{ asset('storage/'.$resume->photo) }}" alt="Photo" class="object-cover w-full h-full">
-                    @endif
-                </div>
-
-                <!-- Nama & Summary -->
-                <div class="ml-8">
-                    <h1 class="text-3xl font-bold uppercase">{{ $resume->name }}</h1>
-                    <p class="text-lg">{{ $resume->email }}</p>
-                                    </div>
-            </div>
         </div>
 
-        <!-- Body -->
-        <div class="p-10 grid grid-cols-3 gap-8">
-            <!-- Left Column -->
-            <div class="col-span-2 space-y-8">
-                <!-- Experience -->
-                <div>
-                    <h2 class="mb-4 text-xl font-bold text-blue-600 border-b-2 border-blue-600">Experience</h2>
-                    @foreach($resume->experiences as $exp)
-                        <div class="mb-4">
-                            <div class="flex justify-between">
-                                <h3 class="font-semibold">{{ $exp->position }}</h3>
-                                <span class="text-sm text-gray-500">{{ $exp->start_date }} - {{ $exp->end_date ?? 'Present' }}</span>
-                            </div>
-                            <p class="text-gray-700">{{ $exp->company }}</p>
-                            <p class="text-sm text-gray-600">{{ $exp->description }}</p>
-                        </div>
-                    @endforeach
+        <div class="section">
+            <div class="section-title">Pengalaman Kerja</div>
+            @foreach($resume->experiences as $exp)
+                <div class="item">
+                    <h4>{{ $exp->role }} - {{ $exp->company }}</h4>
+                    <p><i>{{ $exp->duration }}</i></p>
+                    <p>{{ $exp->description }}</p>
                 </div>
+            @endforeach
+        </div>
 
-                <!-- Education -->
-                <div>
-                    <h2 class="mb-4 text-xl font-bold text-blue-600 border-b-2 border-blue-600">Education</h2>
-                    @foreach($resume->educations as $edu)
-                        <div class="mb-4">
-                            <div class="flex justify-between">
-                                <h3 class="font-semibold">{{ $edu->degree }}</h3>
-                                <span class="text-sm text-gray-500">{{ $edu->year }}</span>
-                            </div>
-                            <p class="text-gray-700">{{ $edu->school }}</p>
-                        </div>
-                    @endforeach
+        <div class="section">
+            <div class="section-title">Riwayat Pendidikan</div>
+            @foreach($resume->educations as $edu)
+                <div class="item">
+                    <h4>{{ $edu->degree }}</h4>
+                    <p>{{ $edu->school }} ({{ $edu->year }})</p>
                 </div>
-            </div>
-
-            <!-- Right Column -->
-            <div class="space-y-8">
-                <!-- Skills -->
-                <div>
-                    <h2 class="mb-4 text-xl font-bold text-blue-600 border-b-2 border-blue-600">Skills</h2>
-                    @foreach($resume->skills as $skill)
-                        <div class="mb-3">
-                            <p class="text-sm font-medium">{{ $skill->name }}</p>
-                            <div class="w-full h-2 bg-gray-200 rounded">
-                                <div class="h-2 bg-blue-600 rounded" style="width: {{ $skill->level }}%"></div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-                <!-- Kontak -->
-                <div>
-                    <h2 class="mb-4 text-xl font-bold text-blue-600 border-b-2 border-blue-600">Kontak</h2>
-                    <ul class="text-sm space-y-2">
-                        @if($resume->facebook)
-                            <li>Facebook: {{ $resume->facebook }}</li>
-                        @endif
-                        @if($resume->twitter)
-                            <li>Twitter: {{ $resume->twitter }}</li>
-                        @endif
-                        @if($resume->linkedin)
-                            <li>LinkedIn: {{ $resume->linkedin }}</li>
-                        @endif
-                        @if($resume->website)
-                            <li>Website: {{ $resume->website }}</li>
-                        @endif
-                    </ul>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
+
+    <!-- Kolom Kanan -->
+    <div class="col-right">
+        <div class="header-info">
+            <h1>{{ $resume->name }}</h1>
+            <p>{{ $resume->phone }} | {{ $resume->email }}</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Keahlian</div>
+            <ul>
+                @foreach($resume->skills as $skill)
+                    <li>{{ $skill->name }}</li>
+                @endforeach
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Data Pribadi</div>
+            <table class="info">
+                <tr><td>Tempat Lahir</td><td>:</td><td>{{ $resume->birth_place }}</td></tr>
+                <tr><td>Tanggal Lahir</td><td>:</td><td>{{ $resume->birth_date }}</td></tr>
+                <tr><td>Jenis Kelamin</td><td>:</td><td>{{ $resume->gender }}</td></tr>
+                <tr><td>Alamat</td><td>:</td><td>{{ $resume->address }}</td></tr>
+                <tr><td>Tinggi</td><td>:</td><td>{{ $resume->height }} cm</td></tr>
+                <tr><td>Berat</td><td>:</td><td>{{ $resume->weight }} kg</td></tr>
+                <tr><td>Agama</td><td>:</td><td>{{ $resume->religion }}</td></tr>
+                <tr><td>Status</td><td>:</td><td>{{ $resume->marital_status }}</td></tr>
+                <tr><td>Golongan Darah</td><td>:</td><td>{{ $resume->blood_type }}</td></tr>
+                <tr><td>Kewarganegaraan</td><td>:</td><td>{{ $resume->nationality }}</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

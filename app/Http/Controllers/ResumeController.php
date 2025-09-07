@@ -113,7 +113,7 @@ if (!empty($skillsData)) {
       $view = $template === 'modern' ? 'resume.templates.modern' : 'resume.templates.classic';
       
       $pdf = Pdf::loadView($view, compact('resume'))
-        ->setPaper('a4', 'portrait');
+        ->setPaper('a4', 'potrait');
       
       return $pdf->download('cv-' . $resume->name . '.pdf');
     }
